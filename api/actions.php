@@ -32,7 +32,7 @@
                 exit;
             break;
             default:
-                echo "No action recognize";
+                echo "No action recognized";
                 exit;
             break;
         }
