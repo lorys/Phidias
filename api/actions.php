@@ -1,5 +1,9 @@
 <?php
 
+    @include_once("./env.php");
+
+    @include_once("./functions.php");
+    
     function login($mail, $password) {
         $users = json_decode(file_get_contents("./users.json"));
         $mail = strtolower($mail);
@@ -16,19 +20,11 @@
     function loggedInActions($body) {
         switch ($body['action']) {
             case 'upload':
-                for ($a = 0; isset($_FILES['files'][$a]); $a++) {
-                    if (!is_dir($_storage."/".implode("/", $body['path']))) {
-                        mkdir($_storage."/".implode("/", $body['path']), 0777, true);
-                    }
-                    $uploadSuccess = move_uploaded_file($_FILES['file'.$a]['tmp_name'], $_storage."/".implode("/", $body['path'])."/".$_FILES['file'.$a]['name'].".file");
-                    if ($uploadSuccess)
-                        file_put_contents($_storage."/".implode("/", $body['path'])."/".$_FILES['file'.$a]['name'].".details", json_encode(["details" => $body['details'], "fileDetails" => $_FILES['file'+$a]]));
-                }
-                echo "success";
+                echo json_encode(uploadFile($body['name'], $body['keywords'], $body['location']));
                 exit;
             break;
             case 'list':
-                echo json_encode(glob($_storage."/".implode("/", $body['path'])."/*"));
+                echo json_encode(getFiles());
                 exit;
             break;
             default:

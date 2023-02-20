@@ -5,12 +5,19 @@
     include_once("env.php");
     include_once("actions.php");
 
-    switch ($_POST['action']) {
+    $bodyReceived = file_get_contents("php://input");
+    $body = json_decode($bodyReceived, true);
+    if (!$body && count($_POST)) {
+        $body = $_POST;
+    }
+
+    switch ($body['action']) {
         case 'login':
-            login($_POST['mail'], $_POST['password']);
+            login($body['mail'], $body['password']);
         break;
         default:
-            loggedInActions($_POST);
+            if (isset($_SESSION['login']))
+              loggedInActions($body);
         break;
     }
 ?>

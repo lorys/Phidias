@@ -18,7 +18,7 @@ let state = {
 };
 
 const generateBody = () => {
-    document.body.innerHTML=page[stateProxy.page];
+    document.querySelector(".root").innerHTML=page[stateProxy.page];
 };
 
 const stateProxy = new Proxy(state, {
@@ -42,7 +42,7 @@ const Api = {
             }
         }).then(() => {
             stateProxy.loading = false;
-        })
+        });
     }
 };
 
